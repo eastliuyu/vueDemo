@@ -1,7 +1,7 @@
 # vue
 
 > A Vue.js project
-
+这是一个vue学习demo
 ## Build Setup
 
 ``` bash

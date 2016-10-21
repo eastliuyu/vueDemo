@@ -19,7 +19,7 @@
         </tbody>
     </table>
     <button class="btn btn-primary" v-on:click="openNewItemDialog('create new item')">Create</button>
-    <dialog :title="title" :mode="mode" :fields="columns" :item="item" :create-itme="createItem"></dialog>
+    <dialog :title="title" :mode="mode" :fields="columns" :item="item" v-on:create-itme="createItem"></dialog>
 </template>
 <script>
 import dialog from './dialog.vue'
@@ -42,6 +42,7 @@ export default {
                 this.$broadcast('showDialog', true);
             },
             createItem: function() {
+                console.log(123);
                 this.dataList.push(this.item);
                 //向子组件广播事件
                 this.$broadcast('showDialog', false);

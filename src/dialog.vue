@@ -32,6 +32,7 @@ export default {
         methods: {
             save: function() {
                 if (this.mode == 1) {
+                    console.log('1');
                     this.$dispatch('createItem');
                 }
 
