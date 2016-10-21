@@ -32,12 +32,11 @@ export default {
         methods: {
             save: function() {
                 if (this.mode == 1) {
-                    console.log('1');
-                    this.$dispatch('createItem');
+                    this.$dispatch('create-item');
                 }
 
             },
-            close:function(){
+            close: function() {
                 this.show = false;
             }
         },
