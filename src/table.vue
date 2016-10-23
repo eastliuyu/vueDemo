@@ -30,10 +30,10 @@ import dialog from './dialog.vue'
 export default {
     data() {
             return {
-                mode: 0,
-                item: {},
-                keyColumn: '',
-                title: 'create'
+                mode: 0, //模式
+                item: {}, //数据对象
+                keyColumn: '', //主键
+                title: 'create' //标题
             }
         },
         //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
@@ -47,6 +47,7 @@ export default {
             }
         },
         methods: {
+            //删除对象
             delete: function(index) {
                 this.dataList.splice(index, 1);
             },
@@ -83,6 +84,7 @@ export default {
                 }
                 return c;
             },
+            //查找主键
             findItemByKey: function(key) {
                 var keyColumn = this.keyColumn;
                 for (var i = 0; i < this.dataList.length; i++) {
@@ -91,6 +93,7 @@ export default {
                     }
                 }
             },
+            //检查主键是否存在
             itemExists: function() {
                 var keyColumn = this.keyColumn;
                 for (var i = 0; i < this.dataList.length; i++) {
@@ -100,6 +103,7 @@ export default {
                     return false;
                 }
             },
+            //添加数据
             createItem: function() {
                 var keyColumn = this.keyColumn;
                 if (!this.itemExists()) {
@@ -111,6 +115,7 @@ export default {
                     alert(keyColumn + ' "' + this.item[keyColumn] + '" is already exists');
                 }
             },
+            //更新数据
             updateItem: function() {
                 // 获取主键列
                 var keyColumn = this.keyColumn

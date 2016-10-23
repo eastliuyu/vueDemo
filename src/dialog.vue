@@ -30,6 +30,7 @@ export default {
             item: ''
         },
         methods: {
+            //判断模式，如果是1就是新建，如果是2就是更新
             save: function() {
                 if (this.mode == 1) {
                     this.$dispatch('create-item');
@@ -42,6 +43,7 @@ export default {
                 this.show = false;
             }
         },
+        //监听事件
         events: {
             'showDialog': function(show) {
                 this.show = show;
