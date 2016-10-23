@@ -9,9 +9,12 @@
         </thead>
         <tbody>
             <tr v-for="p in dataList|filterBy searchKey" class="text-center">
-                <td>{{p.name}}</td>
-                <td>{{p.age}}</td>
-                <td>{{p.sex}}</td>
+                <td v-for="col in columns">
+                    <span v-if="col.isKey">
+                        <a href="javascript:void(0)" v-on:click="openEditItemDialog(p[col.name])">{{p[col.name]}}</a>
+                    </span>
+                    <span v-else>{{p[col.name]}}</span>
+                </td>
                 <td>
                     <button class="btn btn-success" v-on:click="delete">Delete</button>
                 </td>
@@ -19,7 +22,8 @@
         </tbody>
     </table>
     <button class="btn btn-primary" v-on:click="openNewItemDialog('create new item')">Create</button>
-    <dialog :title="title" :mode="mode" :fields="columns" :item="item" v-on:create-item="createItem"></dialog>
+    <dialog :title="title" :mode="mode" :fields="columns" :item="item" v-on:create-item="createItem" v-on:update-item="updateItem">
+    </dialog>
 </template>
 <script>
 import dialog from './dialog.vue'
@@ -28,7 +32,18 @@ export default {
             return {
                 mode: 0,
                 item: {},
+                keyColumn: '',
                 title: 'create'
+            }
+        },
+        //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
+        //你可以将其理解为jQuery中的document.ready()。
+        ready: function() {
+            for (var i = 0; i < this.columns.length; i++) {
+                if (this.columns[i].isKey) {
+                    this.keyColumn = this.columns[i]['name']
+                    break;
+                }
             }
         },
         methods: {
@@ -41,12 +56,79 @@ export default {
                 this.item = {};
                 this.$broadcast('showDialog', true);
             },
+            openEditItemDialog: function(key) {
+                var currentItem = this.findItemByKey(key);
+                this.title = 'Edit Item - ' + key;
+                this.mode = 2;
+                this.item = this.initItemForUpdate(currentItem);
+                this.$broadcast('showDialog', true);
+            },
+            initItemForUpdate(p, c) {
+                c = c || {};
+                for (var i in p) {
+                    // 属性i是否为p对象的自有属性
+                    if (p.hasOwnProperty(i)) {
+                        // 属性i是否为复杂类型
+                        if (typeof p[i] === 'object') {
+                            // 如果p[i]是数组，则创建一个新数组
+                            // 如果p[i]是普通对象，则创建一个新对象
+                            c[i] = Array.isArray(p[i]) ? [] : {};
+                            // 递归拷贝复杂类型的属性
+                            this.initItemForUpdate(p[i], c[i]);
+                        } else {
+                            // 属性是基础类型时，直接拷贝
+                            c[i] = p[i];
+                        }
+                    }
+                }
+                return c;
+            },
+            findItemByKey: function(key) {
+                var keyColumn = this.keyColumn;
+                for (var i = 0; i < this.dataList.length; i++) {
+                    if (this.dataList[i][keyColumn] === key) {
+                        return this.dataList[i]
+                    }
+                }
+            },
+            itemExists: function() {
+                var keyColumn = this.keyColumn;
+                for (var i = 0; i < this.dataList.length; i++) {
+                    if (this.item[keyColumn] === this.dataList[i][keyColumn]) {
+                        return true;
+                    }
+                    return false;
+                }
+            },
             createItem: function() {
-                this.dataList.push(this.item);
-                //向子组件广播事件
-                this.$broadcast('showDialog', false);
-                this.item = {};
-            }
+                var keyColumn = this.keyColumn;
+                if (!this.itemExists()) {
+                    this.dataList.push(this.item);
+                    //向子组件广播事件
+                    this.$broadcast('showDialog', false);
+                    this.item = {};
+                } else {
+                    alert(keyColumn + ' "' + this.item[keyColumn] + '" is already exists');
+                }
+            },
+            updateItem: function() {
+                // 获取主键列
+                var keyColumn = this.keyColumn
+
+                for (var i = 0; i < this.dataList.length; i++) {
+                    // 根据主键查找要修改的数据，然后将this.item数据更新到this.dataList[i]
+                    if (this.dataList[i][keyColumn] === this.item[keyColumn]) {
+                        for (var j in this.item) {
+                            this.dataList[i][j] = this.item[j]
+                        }
+                        break;
+                    }
+                }
+                // 广播事件，传入参数false表示隐藏对话框
+                this.$broadcast('showDialog', false)
+                    // 修改完数据后，重置item对象
+                this.item = {}
+            },
         },
         props: {
             dataList: '',

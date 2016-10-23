@@ -4,10 +4,10 @@
         <div class="panel-body">
             <div class="form-group" v-for="field in fields">
                 <label>{{field.name}}</label>
-                <select v-if="field.dataSource" class="form-control" v-model="">
+                <select v-if="field.dataSource" class="form-control" v-model="item[field.name]" :disabled="mode === 2 &&field.isKey">
                     <option v-for="opt in field.dataSource">{{opt}}</option>
                 </select>
-                <input v-else type="text" name="" class="form-control" v-model="item[field.name]">
+                <input v-else type="text" name="" class="form-control" v-model="item[field.name]" :disabled="mode === 2&& field.isKey">
             </div>
         </div>
         <div class="panel-footer">
@@ -33,6 +33,8 @@ export default {
             save: function() {
                 if (this.mode == 1) {
                     this.$dispatch('create-item');
+                } else if (this.mode == 2) {
+                    this.$dispatch('update-item');
                 }
 
             },

@@ -7,8 +7,8 @@ Vue.transition('bounce', {
 });
 Vue.transition('fade', {
     type: 'animation',
-    enterClass: 'fadeInDown',
-    leaveClass: 'fadeOutUp'
+    enterClass: 'fadeIn',
+    leaveClass: 'fadeOut'
 });
 new Vue({
     el: 'body',
