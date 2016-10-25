@@ -1,5 +1,5 @@
 <template>
-    <div id="dialog" class="panel panel-primary animated" v-show:="show" transition="fade">
+    <div id="dialog" class="panel panel-primary animated" v-show:="show" transition="bounce">
         <div class="panel-heading">{{title|capitalize}}</div>
         <div class="panel-body">
             <div class="form-group" v-for="field in fields">
@@ -53,6 +53,10 @@ export default {
 </script>
 <style type="text/css">
 #dialog {
-    width: 50%;
+    width: 300px;
+    position: fixed;
+    top: 30%;
+    margin-left: -150px;
+    left: 50%;
 }
 </style>

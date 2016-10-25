@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import App from './App.vue'
+import Menu from './Menu.vue'
 Vue.transition('bounce', {
     type: 'animation',
-    enterClass: 'bounceInDown',
-    leaveClass: 'bounceOutUp'
+    enterClass: 'bounceInRight',
+    leaveClass: 'bounceOutRight'
 });
 Vue.transition('fade', {
     type: 'animation',
@@ -12,5 +13,5 @@ Vue.transition('fade', {
 });
 new Vue({
     el: 'body',
-    components: { App }
+    components: { App, Menu }
 })
