@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="p in dataList|filterBy searchKey" class="text-center">
+            <tr v-for="p in emp|filterBy searchKey" class="text-center">
                 <td v-for="col in columns">
                     <span v-if="col.isKey">
                         <a href="javascript:void(0)" v-on:click="openEditItemDialog(p[col.name])">{{p[col.name]}}</a>
@@ -33,7 +33,8 @@ export default {
                 mode: 0, //模式
                 item: {}, //数据对象
                 keyColumn: '', //主键
-                title: 'create' //标题
+                title: 'create', //标题
+                emp: {}
             }
         },
         //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
@@ -45,8 +46,22 @@ export default {
                     break;
                 }
             }
+            this.getEmp();
         },
         methods: {
+            getEmp: function() {
+                var self = this;//因为作用域的原因这里要保存this对象
+                $.ajax({
+                    url: 'http://localhost:3000/public/api/getemployee',
+                    dataType: 'jsonp',
+                    success: function(data) {
+                        self.emp = data;
+                    },
+                    error: function(err) {
+                        alert(err);
+                    }
+                });
+            },
             //删除对象
             delete: function(index) {
                 this.dataList.splice(index, 1);
