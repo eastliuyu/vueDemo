@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="p in emp|filterBy searchKey" class="text-center">
+            <tr v-for="p in dataList|filterBy searchKey" class="text-center">
                 <td v-for="col in columns">
                     <span v-if="col.isKey">
                         <a href="javascript:void(0)" v-on:click="openEditItemDialog(p[col.name])">{{p[col.name]}}</a>
@@ -34,7 +34,7 @@ export default {
                 item: {}, //数据对象
                 keyColumn: '', //主键
                 title: 'create', //标题
-                emp: {}
+                dataList: {}
             }
         },
         //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
@@ -55,7 +55,7 @@ export default {
                     url: 'http://localhost:3000/public/api/getemployee',
                     dataType: 'jsonp',
                     success: function(data) {
-                        self.emp = data;
+                        self.dataList = data;
                     },
                     error: function(err) {
                         alert(err);
@@ -151,7 +151,7 @@ export default {
             },
         },
         props: {
-            dataList: '',
+            // dataList: '',
             columns: '',
             searchKey: ''
         },
@@ -160,3 +160,8 @@ export default {
         }
 }
 </script>
+<style type="text/css">
+    button.btn-primary{
+        margin-bottom: 40px;
+    }
+</style>

@@ -5,7 +5,7 @@
             <div class="search">
                 <label>Search</label>
                 <input type="text" name="" class="form-control" v-model="searchQuery">
-                <grid v-bind:data-list="people" v-bind:columns="columns" v-bind:search-key="searchQuery"></grid>
+                <grid v-bind:columns="columns" v-bind:search-key="searchQuery"></grid>
             </div>
         </div>
     </div>
