@@ -8,7 +8,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-for="p in dataList|filterBy searchKey" class="text-center">
+            <tr v-for="(index,p) in dataList|filterBy searchKey" class="text-center">
                 <td v-for="col in columns">
                     <span v-if="col.isKey">
                         <a href="javascript:void(0)" v-on:click="openEditItemDialog(p[col.name])">{{p[col.name]}}</a>
@@ -16,7 +16,7 @@
                     <span v-else>{{p[col.name]}}</span>
                 </td>
                 <td>
-                    <button class="btn btn-success" v-on:click="delete">Delete</button>
+                    <button class="btn btn-success" v-on:click="deleteEmp(index)">Delete</button>
                 </td>
             </tr>
         </tbody>
@@ -34,7 +34,7 @@ export default {
                 item: {}, //数据对象
                 keyColumn: '', //主键
                 title: 'create', //标题
-                dataList: {}
+                dataList: {} //数据库列表
             }
         },
         //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
@@ -63,8 +63,19 @@ export default {
                 });
             },
             //删除对象
-            delete: function(index) {
-                this.dataList.splice(index, 1);
+            deleteEmp: function(index) {
+                var x = this.dataList.splice(index, 1);
+                $.ajax({
+                    url: 'http://localhost:3000/public/api/delete',
+                    dataType: 'jsonp',
+                    data: 'name=' + x[0].name,
+                    success: function(data) {
+                        alert(data);
+                    },
+                    error: function() {
+                        alert('删除失败');
+                    }
+                });
             },
             openNewItemDialog: function(title) {
                 this.title = title;
@@ -157,6 +168,24 @@ export default {
                         break;
                     }
                 }
+                console.log(this.item);
+                var newitem = {
+                    name: this.item.name,
+                    age: this.item.age,
+                    sex: this.item.sex
+                }
+                console.log(newitem);
+                $.ajax({
+                    url: 'http://localhost:3000/public/api/update',
+                    dataType: 'jsonp',
+                    data: newitem,
+                    success: function(data) {
+                        alert(data);
+                    },
+                    error: function() {
+                        alert('修改失败');
+                    }
+                });
                 // 广播事件，传入参数false表示隐藏对话框
                 this.$broadcast('showDialog', false)
                     // 修改完数据后，重置item对象
