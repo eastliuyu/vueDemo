@@ -21,7 +21,7 @@
             </tr>
         </tbody>
     </table>
-    <button class="btn btn-primary" v-on:click="openNewItemDialog('create new item')">Create</button>
+    <button class="btn btn-primary create-btn" v-on:click="openNewItemDialog('create new item')">Create</button>
     <dialog :title="title" :mode="mode" :fields="columns" :item="item" v-on:create-item="createItem" v-on:update-item="updateItem">
     </dialog>
 </template>
@@ -50,7 +50,7 @@ export default {
         },
         methods: {
             getEmp: function() {
-                var self = this;//因为作用域的原因这里要保存this对象
+                var self = this; //因为作用域的原因这里要保存this对象
                 $.ajax({
                     url: 'http://localhost:3000/public/api/getemployee',
                     dataType: 'jsonp',
@@ -122,6 +122,19 @@ export default {
             createItem: function() {
                 var keyColumn = this.keyColumn;
                 if (!this.itemExists()) {
+                    $.ajax({
+                        url: 'http://localhost:3000/public/api/create',
+                        dataType: 'jsonp',
+                        type: 'GET',
+                        data: this.item,
+                        // callback:'callback',
+                        success: function(data) {
+                            alert(data);
+                        },
+                        error: function() {
+                            alert('添加失败');
+                        }
+                    });
                     this.dataList.push(this.item);
                     //向子组件广播事件
                     this.$broadcast('showDialog', false);
@@ -161,7 +174,7 @@ export default {
 }
 </script>
 <style type="text/css">
-    button.btn-primary{
-        margin-bottom: 40px;
-    }
+button.create-btn {
+    margin-bottom: 40px;
+}
 </style>
