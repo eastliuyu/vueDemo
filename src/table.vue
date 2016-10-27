@@ -24,9 +24,14 @@
     <button class="btn btn-primary create-btn" v-on:click="openNewItemDialog('create new item')">Create</button>
     <dialog :title="title" :mode="mode" :fields="columns" :item="item" v-on:create-item="createItem" v-on:update-item="updateItem">
     </dialog>
+    <loading :show="loadingShow" :text="callBackMag"></loading>
+    <toast :show.sync="msgShow">{{msg}}</toast>
 </template>
 <script>
 import dialog from './dialog.vue'
+import Loading from 'vux/src/components/loading/index.vue'
+import Toast from 'vux/src/components/toast/index.vue'
+import Vue from 'vue'
 export default {
     data() {
             return {
@@ -34,7 +39,10 @@ export default {
                 item: {}, //数据对象
                 keyColumn: '', //主键
                 title: 'create', //标题
-                dataList: {} //数据库列表
+                dataList: {}, //数据库列表
+                loadingShow: true, //信息加载提示框
+                msgShow: false,
+                msg: '处理成功'
             }
         },
         //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
@@ -47,34 +55,39 @@ export default {
                 }
             }
             this.getEmp();
+            Vue.http.interceptors.push(function(request, next) {
+                this.loadingShow = true;
+                next(function(response) {
+                    // ...
+                    // 请求发送后的处理逻辑
+                    // ...
+                    // 根据请求的状态，response参数会返回给successCallback或errorCallback
+                    this.loadingShow = false;
+                    this.msgShow = true;
+                    return response
+                })
+            })
         },
         methods: {
             getEmp: function() {
-                var self = this; //因为作用域的原因这里要保存this对象
-                $.ajax({
-                    url: 'http://localhost:3000/public/api/getemployee',
-                    dataType: 'jsonp',
-                    success: function(data) {
-                        self.dataList = data;
-                    },
-                    error: function(err) {
-                        alert(err);
-                    }
+                //因为作用域的原因这里要保存this对象
+                var self = this;
+                this.$http.jsonp('http://192.168.4.22:3000/public/api/getemployee').then((res) => {
+                    self.dataList = res.body;
+                    this.loadingShow = false;
+                }, (err) => {
+                    alert(err);
                 });
             },
             //删除对象
             deleteEmp: function(index) {
                 var x = this.dataList.splice(index, 1);
-                $.ajax({
-                    url: 'http://localhost:3000/public/api/delete',
-                    dataType: 'jsonp',
-                    data: 'name=' + x[0].name,
-                    success: function(data) {
-                        alert(data);
-                    },
-                    error: function() {
-                        alert('删除失败');
+                this.$http.jsonp('http://192.168.4.22:3000/public/api/delete', {
+                    params: {
+                        name: x[0].name
                     }
+                }).then((res) => {}, () => {
+                    alert('删除失败');
                 });
             },
             openNewItemDialog: function(title) {
@@ -133,18 +146,10 @@ export default {
             createItem: function() {
                 var keyColumn = this.keyColumn;
                 if (!this.itemExists()) {
-                    $.ajax({
-                        url: 'http://localhost:3000/public/api/create',
-                        dataType: 'jsonp',
-                        type: 'GET',
-                        data: this.item,
-                        // callback:'callback',
-                        success: function(data) {
-                            alert(data);
-                        },
-                        error: function() {
-                            alert('添加失败');
-                        }
+                    this.$http.jsonp('http://192.168.4.22:3000/public/api/create', {
+                        params: this.item
+                    }).then((res) => {}, (res) => {
+                        alert('添加失败');
                     });
                     this.dataList.push(this.item);
                     //向子组件广播事件
@@ -168,23 +173,15 @@ export default {
                         break;
                     }
                 }
-                console.log(this.item);
                 var newitem = {
                     name: this.item.name,
                     age: this.item.age,
                     sex: this.item.sex
                 }
-                console.log(newitem);
-                $.ajax({
-                    url: 'http://localhost:3000/public/api/update',
-                    dataType: 'jsonp',
-                    data: newitem,
-                    success: function(data) {
-                        alert(data);
-                    },
-                    error: function() {
-                        alert('修改失败');
-                    }
+                this.$http.jsonp('http://localhost:3000/public/api/update', {
+                    params: newitem
+                }).then((res) => {}, (res) => {
+                    alert('修改失败');
                 });
                 // 广播事件，传入参数false表示隐藏对话框
                 this.$broadcast('showDialog', false)
@@ -198,7 +195,9 @@ export default {
             searchKey: ''
         },
         components: {
-            dialog
+            dialog,
+            Loading,
+            Toast
         }
 }
 </script>
@@ -206,4 +205,6 @@ export default {
 button.create-btn {
     margin-bottom: 40px;
 }
+
+@import '~vux/dist/vux.css';
 </style>

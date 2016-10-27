@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Menu from './Menu.vue'
+import Login from './Login.vue'
+import VueResource from 'vue-resource'
+Vue.use(VueResource);
 Vue.transition('bounce', {
     type: 'animation',
     enterClass: 'bounceInRight',
@@ -13,5 +16,5 @@ Vue.transition('fade', {
 });
 new Vue({
     el: 'body',
-    components: { App, Menu }
+    components: { App, Menu, Login }
 })
