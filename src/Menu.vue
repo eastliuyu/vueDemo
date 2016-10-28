@@ -1,13 +1,15 @@
 <template>
-    <div id="menu">
-        <div v-for="l in list"><i class="icon" v-bind:class="l"></i></div>
-    </div>
+<div id="menu">
+    <a v-for="l in list" v-link="{ path: l}">
+        <div><i class="icon" v-bind:class="l"></i></div>
+    </a>
+</div>
 </template>
 <script>
 export default {
     data() {
         return {
-            list: ['HOME', 'LIST','USER']
+            list: ['login', 'register', 'list']
         }
     }
 }
@@ -18,17 +20,18 @@ export default {
     height: 40px;
     background-color: #fff;
     border-top: 1px solid #ccc;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     display: flex;
     line-height: 40px;
 }
 
-#menu div {
+#menu a {
     flex: 1 1 auto;
     text-align: center;
 }
-#menu .icon{
+
+#menu .icon {
     display: inline-block;
     width: 36px;
     height: 36px;
@@ -36,10 +39,12 @@ export default {
     background-size: 100%;
     vertical-align: middle;
 }
-#menu .LIST{
+
+#menu .list {
     background-image: url("/icon/list.png");
 }
-#menu .USER{
+
+#menu .register {
     background-image: url("/icon/user.png");
 }
 </style>

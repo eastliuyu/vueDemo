@@ -1,5 +1,5 @@
 <template>
-    <div id="login">
+    <div id="login" transition="tr">
         <group class="wrap" title="用户登录">
             <xinput title="用户名" placeholder="请输入用户名" is-type="china-name"></xinput>
             <xinput title="密码" placeholder="请输入密码"></xinput>
