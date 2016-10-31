@@ -1,5 +1,5 @@
 <template>
-<div id="menu">
+<div id="menu" class="mui-panel">
     <a v-for="l in list" v-link="{ path: l}">
         <div><i class="icon" v-bind:class="l"></i></div>
     </a>
@@ -17,13 +17,11 @@ export default {
 <style type="text/css">
 #menu {
     width: 100%;
-    height: 40px;
     background-color: #fff;
-    border-top: 1px solid #ccc;
     position: absolute;
-    bottom: 0;
+    top: 0;
     display: flex;
-    line-height: 40px;
+    z-index: 9999;
 }
 
 #menu a {

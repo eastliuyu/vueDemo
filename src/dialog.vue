@@ -1,8 +1,8 @@
 <template>
-    <div id="dialog" class="panel panel-primary animated" v-show:="show" transition="bounce">
+    <div id="dialog" class="mui-panel animated" v-show:="show" transition="bounce">
         <div class="panel-heading">{{title|capitalize}}</div>
         <div class="panel-body">
-            <div class="form-group" v-for="field in fields">
+            <div class="mui-textfield" v-for="field in fields">
                 <label>{{field.name}}</label>
                 <select v-if="field.dataSource" class="form-control" v-model="item[field.name]" :disabled="mode === 2 &&field.isKey">
                     <option v-for="opt in field.dataSource">{{opt}}</option>
@@ -11,8 +11,8 @@
             </div>
         </div>
         <div class="panel-footer">
-            <button class="btn btn-primary" v-on:click="save">save</button>
-            <button class="btn" v-on:click="close">close</button>
+            <button class="mui-btn mui-btn--raised" v-on:click="save">save</button>
+            <button class="mui-btn mui-btn--raised" v-on:click="close">close</button>
         </div>
     </div>
 </template>

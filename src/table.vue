@@ -1,5 +1,5 @@
 <template>
-    <table class="table table-striped table-hover table-bordered">
+    <table class="mui-table mui-table--bordered" transition="ani">
         <thead>
             <tr>
                 <!-- |为管道标识符，也就是数据先通过capitalize过滤或者处理后，再交给col.name呈现 -->
@@ -16,12 +16,12 @@
                     <span v-else>{{p[col.name]}}</span>
                 </td>
                 <td>
-                    <button class="btn btn-success" v-on:click="deleteEmp(index)">Delete</button>
+                    <button class="mui-btn mui-btn--small mui-btn--primary mui-btn--raised" v-on:click="deleteEmp(index)">Delete</button>
                 </td>
             </tr>
         </tbody>
     </table>
-    <button class="btn btn-primary create-btn" v-on:click="openNewItemDialog('create new item')">Create</button>
+    <button class="mui-btn mui-btn--small mui-btn--primary mui-btn--raised" v-on:click="openNewItemDialog('create new item')">Create</button>
     <dialog :title="title" :mode="mode" :fields="columns" :item="item" v-on:create-item="createItem" v-on:update-item="updateItem">
     </dialog>
     <loading :show="loadingShow" :text="callBackMag"></loading>
@@ -42,7 +42,8 @@ export default {
                 dataList: {}, //数据库列表
                 loadingShow: true, //信息加载提示框
                 msgShow: false,
-                msg: '处理成功'
+                msg: '处理成功',
+                locah: 'http://localhost:3000'
             }
         },
         //ready()函数会在编译结束和 $el 第一次插入文档之后调用，
@@ -72,7 +73,7 @@ export default {
             getEmp: function() {
                 //因为作用域的原因这里要保存this对象
                 var self = this;
-                this.$http.jsonp('http://192.168.4.22:3000/public/api/getemployee').then((res) => {
+                this.$http.jsonp(this.locah + '/public/api/getemployee').then((res) => {
                     self.dataList = res.body;
                     this.loadingShow = false;
                 }, (err) => {
@@ -82,7 +83,7 @@ export default {
             //删除对象
             deleteEmp: function(index) {
                 var x = this.dataList.splice(index, 1);
-                this.$http.jsonp('http://192.168.4.22:3000/public/api/delete', {
+                this.$http.jsonp(this.locah + '/public/api/delete', {
                     params: {
                         name: x[0].name
                     }
@@ -146,7 +147,7 @@ export default {
             createItem: function() {
                 var keyColumn = this.keyColumn;
                 if (!this.itemExists()) {
-                    this.$http.jsonp('http://192.168.4.22:3000/public/api/create', {
+                    this.$http.jsonp(this.locah + '/public/api/create', {
                         params: this.item
                     }).then((res) => {}, (res) => {
                         alert('添加失败');
@@ -178,7 +179,7 @@ export default {
                     age: this.item.age,
                     sex: this.item.sex
                 }
-                this.$http.jsonp('http://localhost:3000/public/api/update', {
+                this.$http.jsonp(this.locah + '/public/api/update', {
                     params: newitem
                 }).then((res) => {}, (res) => {
                     alert('修改失败');

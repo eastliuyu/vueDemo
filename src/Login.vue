@@ -1,41 +1,45 @@
 <template>
-    <div id="login" transition="tr">
-        <group class="wrap" title="用户登录">
-            <xinput title="用户名" placeholder="请输入用户名" is-type="china-name"></xinput>
-            <xinput title="密码" placeholder="请输入密码"></xinput>
-            <xbutton text="登录" type="primary"></xbutton>
-            <xbutton text="注册"></xbutton>
-        </group>
+    <div id="login" transition="ani" class="page">
+        <form class="" action="http://localhost:3000/public/api/login" method="post">
+            <h2>用户登录</h2>
+            <div class="mui-textfield mui-textfield--float-label">
+                <input type="text" name="name" required="">
+                <label>请输入用户名</label>
+            </div>
+            <div class="mui-textfield mui-textfield--float-label">
+                <input type="password" name="password" required="">
+                <label>请输密码</label>
+            </div>
+            <div class="mui-textfield mui-textfield--float-label">
+                <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">登录</button>
+                <a v-link="{path:'register'}">
+                    <button type="button" class="mui-btn mui-btn--primary mui-btn--raised">注册</button>
+                </a>
+            </div>
+        </form>
     </div>
 </template>
 <script>
-import Group from 'vux/src/components/group/index.vue'
-import Xinput from 'vux/src/components/x-input/index.vue'
-import Xbutton from 'vux/src/components/x-button/index.vue'
 export default {
     data() {
             return {
 
             }
         },
-        components: {
-            Group,
-            Xinput,
-            Xbutton
-        }
+        components: {}
 }
 </script>
-<style>
+<style lang="less">
 #login {
     width: 100%;
     height: 100%;
+    h2 {
+        margin-top: 100px;
+        text-align: center;
+    }
+    form {
+        width: 75%;
+        margin: 50px auto 0;
+    }
 }
-
-.wrap {
-    width: 90%;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
-@import '~vux/dist/vux.css';
 </style>
