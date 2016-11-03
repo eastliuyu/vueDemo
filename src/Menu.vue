@@ -1,8 +1,8 @@
 <template>
 <div id="menu" class="mui-panel">
-    <a v-for="l in list" v-link="{ path: l}">
+    <router-link v-for="l in list" to="l">
         <div><i class="icon" v-bind:class="l"></i></div>
-    </a>
+    </router-link>
 </div>
 </template>
 <script>

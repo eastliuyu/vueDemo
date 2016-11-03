@@ -1,5 +1,6 @@
 <template>
-    <div id="register" class="page" transition="ani">
+<transition name="ani">
+    <div id="register" class="page">
         <div class="content">
             <h2>账号注册</h2>
             <form role="form" action="http://localhost:3000/public/api/register" method="post">
@@ -21,31 +22,32 @@
                 </div>
                 <div class="mui-textfield mui-textfield--float-label">
                     <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">注册</button>
-                    <a v-link="{path:'login'}">
+                    <router-link to="/login">
                         <button type="button" class="mui-btn mui-btn--primary mui-btn--raised">登录</button>
-                    </a>
+                    </router-link>
                 </div>
             </form>
         </div>
     </div>
+</transition>
 </template>
 <script>
 export default {
     data() {
-            return {
+        return {
 
-            }
-        },
-        route: {
-            activate: function(transition) {
-                console.log('hook-example activated!')
-                transition.next()
-            },
-            deactivate: function(transition) {
-                console.log('hook-example deactivated!')
-                transition.next()
-            }
         }
+    },
+    route: {
+        beforeRouterEnter: function(transition) {
+            console.log('hook-example activated!')
+            transition.next()
+        },
+        beforeDestroy: function(transition) {
+            console.log('hook-example deactivated!')
+            transition.next()
+        }
+    }
 }
 </script>
 <style lang="less">

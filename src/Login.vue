@@ -1,5 +1,6 @@
 <template>
-    <div id="login" transition="ani" class="page">
+<transition name="ani">
+    <div id="login" class="page">
         <form class="" action="http://localhost:3000/public/api/login" method="post">
             <h2>用户登录</h2>
             <div class="mui-textfield mui-textfield--float-label">
@@ -12,21 +13,22 @@
             </div>
             <div class="mui-textfield mui-textfield--float-label">
                 <button type="submit" class="mui-btn mui-btn--primary mui-btn--raised">登录</button>
-                <a v-link="{path:'register'}">
+                <router-link to="/register">
                     <button type="button" class="mui-btn mui-btn--primary mui-btn--raised">注册</button>
-                </a>
+                </router-link>
             </div>
         </form>
     </div>
+</transition>
 </template>
 <script>
 export default {
     data() {
-            return {
+        return {
 
-            }
-        },
-        components: {}
+        }
+    },
+    components: {}
 }
 </script>
 <style lang="less">

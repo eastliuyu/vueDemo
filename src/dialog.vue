@@ -1,6 +1,7 @@
 <template>
-    <div id="dialog" class="mui-panel animated" v-show:="show" transition="bounce">
-        <div class="panel-heading">{{title|capitalize}}</div>
+<transition name="bounce">
+    <div id="dialog1" class="mui-panel animated" v-show:="show">
+        <div class="panel-heading">{{title}}</div>
         <div class="panel-body">
             <div class="mui-textfield" v-for="field in fields">
                 <label>{{field.name}}</label>
@@ -15,40 +16,41 @@
             <button class="mui-btn mui-btn--raised" v-on:click="close">close</button>
         </div>
     </div>
+</transition>
 </template>
 <script>
 export default {
     data() {
-            return {
-                show: false
-            }
-        },
-        props: {
-            mode: '',
-            title: '',
-            fields: '',
-            item: ''
-        },
-        methods: {
-            //判断模式，如果是1就是新建，如果是2就是更新
-            save: function() {
-                if (this.mode == 1) {
-                    this.$dispatch('create-item');
-                } else if (this.mode == 2) {
-                    this.$dispatch('update-item');
-                }
-
-            },
-            close: function() {
-                this.show = false;
-            }
-        },
-        //监听事件
-        events: {
-            'showDialog': function(show) {
-                this.show = show;
-            }
+        return {
+            show: false
         }
+    },
+    props: {
+        mode: '',
+        title: '',
+        fields: '',
+        item: ''
+    },
+    methods: {
+        //判断模式，如果是1就是新建，如果是2就是更新
+        save: function() {
+            if (this.mode == 1) {
+                this.$emit('create-item');
+            } else if (this.mode == 2) {
+                this.$emit('update-item');
+            }
+
+        },
+        close: function() {
+            this.show = false;
+        }
+    },
+    //监听事件
+    events: {
+        'showDialog': function(show) {
+            this.show = show;
+        }
+    }
 }
 </script>
 <style type="text/css">

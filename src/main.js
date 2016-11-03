@@ -7,39 +7,25 @@ import Register from './register.vue'
 import VueRouter from 'vue-router'
 Vue.use(VueResource);
 Vue.use(VueRouter);
-Vue.transition('bounce', {
-    type: 'animation',
-    enterClass: 'bounceInRight',
-    leaveClass: 'bounceOutRight'
-});
-Vue.transition('fade', {
-    type: 'animation',
-    enterClass: 'fadeIn',
-    leaveClass: 'fadeOut'
-});
-let router = new VueRouter();
-router.map({
-    '/login': {
-        component: Login
-    },
-    '/register': {
-        component: Register
-    },
-    '/list': {
-        component: App
-    }
+const routes = [{
+    path: '/login',
+    component: Login
+}, {
+    path: '/register',
+    component: Register
+}, {
+    path: '/app',
+    component: App
+}, {
+    path: '*',
+    redirect: 'login'
+}];
+const router = new VueRouter({
+    base: __dirname,
+    routes: routes
 });
 
-// new Vue({
-//     el: '#main',
-//     components: {
-//         App,
-//         Menu,
-//         Login,
-//         Register
-//     }
-// })
-router.redirect({
-    '*': '/login'
-})
-router.start(Main, '#main');
+new Vue({
+    router: router,
+    render: h => h(Main)
+}).$mount('#app');

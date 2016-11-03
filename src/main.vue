@@ -2,15 +2,15 @@
 <div id="wrapper">
     <router-view>
     </router-view>
-    <menu></menu>
+    <me></me>
 </div>
 </template>
 
 <script>
-import Menu from './Menu.vue'
+import Me from './Menu.vue'
 export default {
     components: {
-        Menu
+        Me
     }
 }
 </script>
